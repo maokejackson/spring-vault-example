@@ -6,6 +6,7 @@ How to Run
 
 1. Start vault backend (refer to next section).
 2. Start Spring Boot application: `mvn spring-boot:run`.
+3. Access REST endpoints at http://localhost:8080/swagger-ui/index.html.
 
 Start Vault Backend
 --------------------
@@ -101,8 +102,3 @@ set VAULT_ADDR=http://127.0.0.1:8200/
 # Create Secret Engine
 bao.exe secrets enable -path spring -version 2 kv
 ```
-
-Rest Endpoints
---------------------
-
-Available at http://localhost:8080/swagger-ui/index.html once the server is started.

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Secret")
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/{engine}/{vault}")
+@RequestMapping("/api/engines/{engine}/{vault}")
 @RestController
 class SecretController {
 
@@ -34,13 +34,13 @@ class SecretController {
     }
 
     @Operation(summary = "Get the value of a secret")
-    @GetMapping("/{secretKey}")
+    @GetMapping("/{secret}")
     Object getSecret(
             @PathVariable String engine,
             @PathVariable String vault,
-            @PathVariable String secretKey
+            @PathVariable String secret
     ) {
-        return vaultTemplate.opsForKeyValue(engine, KeyValueBackend.KV_2).get(vault).getData().get(secretKey);
+        return vaultTemplate.opsForKeyValue(engine, KeyValueBackend.KV_2).get(vault).getData().get(secret);
     }
 
     @Operation(summary = "Add new secret to specific vault")
@@ -54,7 +54,7 @@ class SecretController {
         VaultKeyValueOperations operations = vaultTemplate.opsForKeyValue(engine, KeyValueBackend.KV_2);
         Map<String, Object> map = operations.get(vault).getData();
 
-        Assert.state(!map.containsKey(body.key), "Secret key already exists");
+        Assert.state(!map.containsKey(body.key), "Secret already exists");
 
         map.putIfAbsent(body.key, body.value);
         operations.put(vault, map);
@@ -65,21 +65,21 @@ class SecretController {
             String value
     ) {}
 
-    @Operation(summary = "Update the value of a secret")
+    @Operation(summary = "Update the value of specific secret")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{secretKey}")
+    @PutMapping("/{secret}")
     void updateSecret(
             @PathVariable String engine,
             @PathVariable String vault,
-            @PathVariable String secretKey,
+            @PathVariable String secret,
             @RequestBody @Valid UpdateSecretBody body
     ) {
         VaultKeyValueOperations operations = vaultTemplate.opsForKeyValue(engine, KeyValueBackend.KV_2);
         Map<String, Object> map = operations.get(vault).getData();
 
-        Assert.state(map.containsKey(secretKey), "Secret key does not exist");
+        Assert.state(map.containsKey(secret), "Secret does not exist");
 
-        map.put(secretKey, body.value);
+        map.put(secret, body.value);
         operations.put(vault, map);
     }
 
@@ -89,18 +89,18 @@ class SecretController {
 
     @Operation(summary = "Delete a secret from specific vault")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{secretKey}")
+    @DeleteMapping("/{secret}")
     void deleteSecret(
             @PathVariable String engine,
             @PathVariable String vault,
-            @PathVariable String secretKey
+            @PathVariable String secret
     ) {
         VaultKeyValueOperations operations = vaultTemplate.opsForKeyValue(engine, KeyValueBackend.KV_2);
         Map<String, Object> map = operations.get(vault).getData();
 
-        Assert.state(map.containsKey(secretKey), "Secret key does not exist");
+        Assert.state(map.containsKey(secret), "Secret does not exist");
 
-        map.remove(secretKey);
+        map.remove(secret);
         operations.put(vault, map);
     }
 }

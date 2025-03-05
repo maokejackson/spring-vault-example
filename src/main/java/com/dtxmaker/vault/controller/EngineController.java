@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Engine")
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/engines")
 @RestController
 class EngineController {
 
@@ -38,14 +38,18 @@ class EngineController {
     record Engine(
             @NonNull String path,
             @NonNull String type,
-            String description
+            String description,
+            Map<String, Object> config,
+            Map<String, String> options
     ) {
 
         Engine(Map.Entry<String, VaultMount> mount) {
             this(
                     mount.getKey(),
                     mount.getValue().getType(),
-                    mount.getValue().getDescription()
+                    mount.getValue().getDescription(),
+                    mount.getValue().getConfig(),
+                    mount.getValue().getOptions()
             );
         }
     }
@@ -64,6 +68,7 @@ class EngineController {
         operations.mount(body.path, VaultMount.builder()
                 .type("kv")
                 .description(body.description)
+                .options(Map.of("version", "2"))
                 .build()
         );
     }

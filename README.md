@@ -63,7 +63,7 @@ vault.exe secrets enable -path spring -version 2 kv
 
 ```sh
 # Download & Install
-wget -O bao.tar.gz https://github.com/openbao/openbao/releases/download/v2.1.1/bao_2.1.1_Linux_x86_64.tar.gz
+wget -O bao.tar.gz https://github.com/openbao/openbao/releases/download/v2.2.0/bao_2.2.0_Linux_x86_64.tar.gz
 tar -zxvf bao.tar.gz bao
 chmod +x bao
 rm -f bao.tar.gz
@@ -84,7 +84,7 @@ set VAULT_ADDR=http://127.0.0.1:8200/
 ```powershell
 # Download & Install
 $ProgressPreference = 'SilentlyContinue'
-Invoke-WebRequest -Uri "https://github.com/openbao/openbao/releases/download/v2.1.1/bao_2.1.1_Windows_x86_64.zip" -OutFile "bao.zip"
+Invoke-WebRequest -Uri "https://github.com/openbao/openbao/releases/download/v2.2.0/bao_2.2.0_Windows_x86_64.zip" -OutFile "bao.zip"
 Expand-Archive -Path "bao.zip"
 Move-Item -Path "bao\bao.exe"
 Remove-Item -Path "bao" -Force -Recurse
